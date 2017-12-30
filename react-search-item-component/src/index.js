@@ -6,7 +6,7 @@ class Item extends React.Component
       // Split on higlight term and include term into parts, ignore case
       let parts = text.split(new RegExp(`(${higlight})`, 'gi'));
       return <span> { parts.map((part, i) => 
-          <span key={i} style={part.toLowerCase() === higlight.toLowerCase() ? { fontWeight: 'bold', backgroundColor: "#21ce99", color: "black" } : {} }>
+          <span key={i} style={part.toLowerCase() === higlight.toLowerCase() ? { fontWeight: 'bold', backgroundColor: this.props.highlight_color_bg, color: this.props.highlight_color_text } : {} }>
               { part }
           </span>)
       } </span>;
@@ -28,7 +28,7 @@ class Item extends React.Component
                 {/* <div className="card-header">Header</div> */}
                 <div className="card-body">
                   { val }
-                  <a href={"/watch/" + this.props.links[this.props.index]["hashed_url"] } className="btn btn-mycolor" style={{ color: "white"}}>View Video</a>
+                  <a href={"/" + this.props.links[this.props.index]["hashed_url"] } className="btn btn-mycolor" style={{ color: "white"}}>View Item</a>
                 </div>
               </div>
       );
@@ -50,7 +50,13 @@ class Search extends React.Component
     var javascript_side_json = this.props.data;
     var links = [];
     // var javascript_side_json = JSON.stringify(javascript_side_json);
-    var javascript_side_json = JSON.parse(javascript_side_json);
+    
+    if(typeof response == 'object')
+    {
+      console.log(javascript_side_json);
+      var javascript_side_json = JSON.parse(javascript_side_json);  
+      
+    }
     var str = this.state.search_term.toLowerCase();
     if(str === "" && str.length === 0)
     {
@@ -92,8 +98,8 @@ class Search extends React.Component
     var links = [];
     for(var section = 0; section < this.props.section_list.length; section++)
     {
-        list.append(this.search(section_list[section])[0])
-        links.append(this.search(section_list[section])[1]) 
+        list.push(this.search(this.props.section_list[section])[0])
+        links.push(this.search(this.props.section_list[section])[1]) 
     }
     //list = [this.search("title")[0], this.search("description")[0]];
     //links = [this.search("title")[1], this.search("description")[1]];
@@ -117,6 +123,10 @@ class Search extends React.Component
     }
     
     let searched = this.state.search_term;
+    console.log(this.props.section_list[0]);
+    var list_of_sections = this.props.section_list;
+    var highlight_text = this.props.highlight_color_text;
+    var highlight_color = this.props.highlight_color_bg;
     return ( 
       <div>
         <br/>
@@ -126,16 +136,16 @@ class Search extends React.Component
           <small id="emailHelp" className="form-text text-muted"></small>
         </div>
         <br/>
-        {this.props.section_list.map(function(item, index_section)
+        {list_of_sections.map(function(item, index_section)
         {
             return(
                 <div>
-                    <h1 style={{ textAlign: "left"}}> { this.props.section_list[index_section]} </h1>
+                    <h1 style={{ textAlign: "left"}}> { list_of_sections[index_section]} </h1>
                     <div style={ divh1 } className="card-group">
                     {list[index_section].map(function(a, index) {
                          return (
                              <div style={{ paddingLeft: "7px", paddingRight: "7px"}} key={index}>
-                                  <Item title={a} links={links[index_section]} index={index} type={this.props.section_list[index_section]}  key={index} searched={searched}/>
+                                  <Item title={a} links={links[index_section]} index={index} type={list_of_sections[index_section]}  key={index} searched={searched} highlight_color_bg={highlight_color} highlight_color_text={highlight_text}/>
                              </div>
                          );
                      })}
