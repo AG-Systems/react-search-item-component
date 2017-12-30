@@ -18,11 +18,13 @@ class MyComponent extends React.Component {
   render() {
 
      return (
-      <Search section_list={["title", "description"]} 
-          highlight_color_text={"black"} 
-          highlight_color_bg={"#21ce99"}
-          data={JSON}
-      />
+     <div>
+        <Search section_list={["title", "description"]} 
+            highlight_color_text={"black"} 
+            highlight_color_bg={"#21ce99"}
+            data={JSON}
+        />
+      </div>
     );
   }
 
